@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#10131b">
+<title>Gold Signal Lab — XAUUSD</title>
+<style>
+:root{color-scheme:dark;--bg:#0b0e14;--panel:#141a24;--line:#283244;--text:#eef2f8;--muted:#a4afc0;--gold:#f0bd4f;--green:#53d6a0;--red:#ff737d;--blue:#8cb8ff}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at top,#182131 0,#0b0e14 55%);color:var(--text);font:16px/1.45 system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
+main{max-width:760px;margin:auto;padding:20px 14px 40px}.brand{display:flex;align-items:center;gap:12px;margin:6px 0 18px}.logo{display:grid;place-items:center;width:46px;height:46px;border-radius:14px;background:#302817;color:var(--gold);font-weight:900;font-size:21px}.eyebrow{font-size:11px;letter-spacing:.16em;color:var(--gold);font-weight:800}.brand h1{font-size:22px;line-height:1.1;margin:3px 0}.sub{color:var(--muted);font-size:13px}
+.notice{border:1px solid #705b2b;background:#211c12;border-radius:14px;padding:12px 14px;color:#f0ddb1;font-size:13px;margin:14px 0}
+.card{background:rgba(20,26,36,.96);border:1px solid var(--line);border-radius:18px;padding:16px;margin:13px 0;box-shadow:0 12px 30px #0002}
+h2{font-size:16px;margin:0 0 12px}p{margin:8px 0}.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.field label{display:block;color:var(--muted);font-size:12px;margin-bottom:6px}.field input,.field select{width:100%;padding:13px 11px;border-radius:11px;border:1px solid #344054;background:#0c1119;color:var(--text);font:inherit;min-width:0}.field input:focus,.field select:focus{outline:2px solid #8cb8ff;border-color:transparent}.hint{font-size:12px;color:var(--muted);margin-top:8px}
+button{border:0;border-radius:12px;padding:14px 16px;font:700 15px system-ui;cursor:pointer;width:100%;margin-top:14px;background:var(--gold);color:#1b160b}
+.result{border:1px solid var(--line);border-radius:16px;padding:16px;background:#0e131c}.signal{font-size:25px;font-weight:900;letter-spacing:.03em}.signal.buy{color:var(--green)}.signal.sell{color:var(--red)}.signal.wait{color:var(--gold)}.why{color:var(--muted);font-size:13px;margin:5px 0 14px}.metrics{display:grid;grid-template-columns:1fr 1fr;gap:9px}.metric{background:#171e2a;border-radius:11px;padding:11px}.metric span{display:block;color:var(--muted);font-size:11px}.metric strong{font-size:16px;overflow-wrap:anywhere}.small{font-size:12px;color:var(--muted)}.footer{font-size:12px;color:var(--muted);padding:6px 2px 0}.tag{display:inline-block;border:1px solid var(--line);border-radius:99px;padding:4px 8px;font-size:11px;color:var(--muted);margin:0 4px 4px 0}
+@media(max-width:420px){.grid{grid-template-columns:1fr 1fr}.card{padding:13px}.metrics{gap:7px}.metric{padding:9px}}
+</style>
+</head>
+<body>
+<main>
+<header class="brand"><div class="logo">Au</div><div><div class="eyebrow">PHONE-ONLY TOOL • DEMO FIRST</div><h1>Gold Signal Lab</h1><div class="sub">XAUUSD · Trend + RSI + ATR · Manual inputs</div></div></header>
+<div class="notice"><b>Important:</b> This page does not receive live market data and does not place trades. Copy indicator readings from your chart. A result is a rule-based study signal, not a prediction or a guarantee.</div>
+
+<section class="card">
+<h2>Live reference chart — XAUUSD</h2>
+<p class="hint">This embedded chart is supplied by TradingView and uses OANDA's XAUUSD feed as a reference. It may not match the exact price or spread on your Tradeview MT5 account. Always confirm the quote in MT5 before considering a trade.</p>
+<div id="tv_chart" style="width:100%;min-height:420px;border-radius:12px;overflow:hidden;background:#0c1119"></div>
+<script src="https://s3.tradingview.com/tv.js"></script>
+<script>
+(function(){
+  function loadChart(){
+    if (window.TradingView && document.getElementById("tv_chart")) {
+      new TradingView.widget({
+        autosize: true,
+        width: "100%",
+        height: 420,
+        symbol: "OANDA:XAUUSD",
+        interval: "15",
+        timezone: "Africa/Johannesburg",
+        theme: "dark",
+        style: "1",
+        locale: "en",
+        enable_publishing: false,
+        allow_symbol_change: true,
+        hide_side_toolbar: true,
+        container_id: "tv_chart"
+      });
+    } else {
+      setTimeout(loadChart, 400);
+    }
+  }
+  loadChart();
+})();
+</script>
+</section>
+
+<section class="card">
+<h2>1. Enter readings from your XAUUSD chart</h2>
+<div class="grid">
+<div class="field"><label for="price">Current / last closed price</label><input id="price" type="number" inputmode="decimal" step="any" placeholder="e.g. 2650.50"></div>
+<div class="field"><label for="ema50">EMA 50</label><input id="ema50" type="number" inputmode="decimal" step="any" placeholder="EMA 50 value"></div>
+<div class="field"><label for="ema200">EMA 200</label><input id="ema200" type="number" inputmode="decimal" step="any" placeholder="EMA 200 value"></div>
+<div class="field"><label for="rsi">RSI 14 (0–100)</label><input id="rsi" type="number" inputmode="decimal" min="0" max="100" step="any" placeholder="e.g. 56"></div>
+<div class="field"><label for="atr">ATR 14 (price units)</label><input id="atr" type="number" inputmode="decimal" min="0" step="any" placeholder="e.g. 4.20"></div>
+<div class="field"><label for="digits">Price decimals</label><select id="digits"><option value="2">2 decimals</option><option value="3">3 decimals</option><option value="1">1 decimal</option></select></div>
+</div>
+<div class="hint">Use the same symbol and timeframe for every reading. Suggested timeframe: M15. Use the last closed candle, not a candle still forming. ATR must be a positive price distance, not a percentage.</div>
+<button id="analyse">Analyse setup</button>
+</section>
+<section class="card" aria-live="polite">
+<h2>2. Analysis result</h2>
+<div class="result">
+<div id="signal" class="signal wait">WAIT — enter readings</div>
+<div id="why" class="why">No setup has been assessed yet.</div>
+<div class="metrics">
+<div class="metric"><span>Entry reference</span><strong id="entry">—</strong></div>
+<div class="metric"><span>Stop-loss (SL)</span><strong id="sl">—</strong></div>
+<div class="metric"><span>Take-profit (TP, 2R)</span><strong id="tp">—</strong></div>
+<div class="metric"><span>Risk distance</span><strong id="distance">—</strong></div>
+</div>
+<p class="small" id="risknote">SL distance uses 1.5 × ATR. TP is set at 2 × the SL distance. Spread, slippage, fees and broker contract rules are not included.</p>
+</div>
+</section>
+<section class="card">
+<h2>Rules used in this version</h2>
+<p><span class="tag">BUY candidate</span> Price above EMA 50, EMA 50 above EMA 200, and RSI from 50 up to but not including 65.</p>
+<p><span class="tag">SELL candidate</span> Price below EMA 50, EMA 50 below EMA 200, and RSI above 35 up to 50.</p>
+<p><span class="tag">WAIT</span> Anything else, or missing/invalid inputs. This simple filter does not check support/resistance, news, spread, or candle patterns.</p>
+</section>
+<p class="footer">Gold Signal Lab is an educational calculator. Test on demo, keep a trade journal, and never treat a signal as financial advice. Do not enter your MT5 password or account details on this page.</p>
+</main>
+<script>
+const $=id=>document.getElementById(id);
+function fmt(n,d){return Number.isFinite(n)?n.toFixed(d):"—"}
+$("analyse").addEventListener("click",()=>{
+ const p=Number($("price").value),e50=Number($("ema50").value),e200=Number($("ema200").value),r=Number($("rsi").value),a=Number($("atr").value),d=Number($("digits").value);
+ const valid=[$("price").value,$("ema50").value,$("ema200").value,$("rsi").value,$("atr").value].every(v=>v.trim()!=="")&&[p,e50,e200,r,a].every(Number.isFinite)&&p>0&&e50>0&&e200>0&&r>=0&&r<=100&&a>0;
+ const s=$("signal");s.className="signal wait";
+ if(!valid){s.textContent="WAIT — check inputs";$("why").textContent="Enter all five readings. Price and EMA values must be positive; RSI must be 0–100; ATR must be greater than zero.";["entry","sl","tp","distance"].forEach(id=>$(id).textContent="—");return}
+ let dir="WAIT",reason="Trend and RSI conditions do not align.";
+ if(p>e50&&e50>e200&&r>=50&&r<65){dir="BUY CANDIDATE";reason="Bullish EMA alignment and RSI filter passed. This is not confirmation of a safe entry."}
+ else if(p<e50&&e50<e200&&r>35&&r<=50){dir="SELL CANDIDATE";reason="Bearish EMA alignment and RSI filter passed. This is not confirmation of a safe entry."}
+ s.className="signal "+(dir.startsWith("BUY")?"buy":dir.startsWith("SELL")?"sell":"wait");s.textContent=dir;$("why").textContent=reason;
+ $("entry").textContent=fmt(p,d);
+ if(dir==="WAIT"){["sl","tp","distance"].forEach(id=>$(id).textContent="—");$("risknote").textContent="No trade levels are suggested while the filter says WAIT. If a candidate appears, check spread, structure and news before considering a demo trade.";return}
+ const dist=1.5*a,sl=dir.startsWith("BUY")?p-dist:p+dist,tp=dir.startsWith("BUY")?p+2*dist:p-2*dist;
+ $("sl").textContent=fmt(sl,d);$("tp").textContent=fmt(tp,d);$("distance").textContent=fmt(dist,d)+" price units";
+ $("risknote").textContent="Illustrative levels only: SL = 1.5 × ATR; TP = 2 × risk distance (2R). These do not account for spread, slippage, fees, gaps or broker execution. Confirm levels and position size manually before any demo order.";
+});
+</script>
+</body>
+</html>
